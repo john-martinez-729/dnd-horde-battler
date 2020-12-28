@@ -1,38 +1,244 @@
+:root {
+  --GhostWhite: #F8F8FF;
+  --TextColor: #858796;
+  --BorderColor: rgba(0, 0, 0, 0.1);
+  --LightText: rgba(0, 0, 0, 0.3);
+  --OffBlack: #313639;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--GhostWhite);
+}
+
+.title {
+  font-size: 32px;
+}
+
+.subtext {
+  margin-bottom: 16px;
+}
+.title-content {
+  color: var(--OffBlack);
+}
+
 .App {
+  position: fixed;
+  overflow: auto;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding: 0 !important;
+}
+
+.common-button {
+  background-color: #4e73df !important;
+  border: 1px solid #4e73df !important;
+}
+
+.common-button:hover {
+  background: #2e59d9 !important;
+  border: 1px solid #2653d4 !important;
+}
+
+.App .top-row {
+  height: 100%;
+}
+
+.App .top-col {
+  height: 100%;
+  padding: 16px !important;
+  border-bottom: 1px solid var(--BorderColor);
+}
+
+.App .divider {
+  border-right: 1px solid var(--BorderColor);
+}
+
+.add-button {
+  position: absolute;
+  right: 8px;
+  padding: 2px 4px !important;
+  font-size: 12px !important;
+}
+
+.footer-row {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  color: var(--TextColor);
+  padding: 16px;
 }
 
-.App-link {
-  color: #61dafb;
+.header-content {
+  margin-bottom: 16px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.horde-data-div {
+  border: 1px solid var(--BorderColor);
+  padding: 8px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.horde-data-div .header {
+  margin-bottom: 8px;
+  color: var(--OffBlack);
+}
+
+.form-control-container {
+  margin-right: 8px;
+}
+
+label {
+  color: var(--OffBlack);
+  margin: 0 !important;
+}
+
+.label-icon {
+  margin-right: 8px;
+}
+
+.form-control {
+  height: 24px !important;
+  padding: 4px !important;
+  color: var(--TextColor) !important;
+}
+
+.form-control::placeholder {
+  color: var(--LightText) !important;
+  font-style: italic;
+}
+
+.d {
+  margin: 0 4px;
+}
+
+.dice-selector {
+  /* background: red !important; */
+}
+
+.creature-container {
+  height: 60px;
+  width: 60px;
+  border: 1px solid var(--BorderColor);
+  margin-right: 4px;
+  margin-bottom: 4px;
+  font-size: 12px;
+  position: relative;
+  color: var(--TextColor);
+}
+
+.creature-designation {
+  position: absolute;
+  top: 0;
+  right: 4px;
+}
+
+.creature-container label {
+  width: 100%;
+  text-align: center;
+  /* font-size: 10px; */
+  /* height: max-content; */
+  margin: 0;
+  padding: 0;
+
+}
+
+.creature-container .data {
+  text-align: center;
+  /* height: 70%;s */
+  height: 100%;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.creature-container#damaged {
+  border: 1px solid goldenRod;
+  color: goldenRod;
+}
+
+.creature-container#bloodied {
+  border: 1px solid DarkOrange;
+  color: DarkOrange;
+}
+
+.creature-container#normal {
+  border: 1px solid green;
+  color: green;
+}
+
+.creature-container#dead {
+  border: 1px solid red;
+  color: red;
+}
+
+.creature-container .skull {
+  display: none;
+}
+
+.creature-container#dead .skull {
+  display: block !important;
+  color: rgba(255, 0, 0, 1);
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.reset-icon {
+  position: absolute;
+  z-index: 100;
+  top: 12px;
+  right: 80px;
+  color: var(--TextColor);
+  cursor: pointer;
+}
+
+.reset-icon:hover {
+  color: var(--OffBlack);
+}
+
+.delete-icon {
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+  color: var(--OffBlack);
+}
+
+.delete-icon:hover {
+  color: var(--OffBlack) !important;
+}
+
+.attack-button {
+  position: absolute;
+  right: 8px;
+  padding: 2px 4px !important;
+  font-size: 12px !important;
+}
+
+.combat-log-container {
+  overflow-y: scroll;
+  max-height: 30%;
+}
+
+.horde-container {
+  max-height: 30%;
+  overflow-y: scroll;
+}
+
+.entry {
+  display: flex;
+}
+
+.entry .text {
+  color: var(--TextColor);
+  margin-left: 8px;
 }
