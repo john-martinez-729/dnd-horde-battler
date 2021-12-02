@@ -376,6 +376,8 @@ class App extends Component {
 
   hordeA = () => {
     const disabled = this.disabledAttackBtn();
+    const horde = this.state.hordeA;
+    const remaining = horde.reduce((acc, cur) => (cur.hp > 0 ? ++acc : acc), 0);
     return (
       <div className="horde-data-div horde-container">
         <Button
@@ -392,9 +394,9 @@ class App extends Component {
           className="reset-icon"
         />
 
-        <div className="header">Horde A ({this.state.hordeA.length})</div>
+        <div className="header">{`Horde A (${remaining}/${horde.length})`}</div>
         <Row noGutters>
-          {this.state.hordeA.map((creature, i) =>
+          {horde.map((creature, i) =>
             this.renderCreature(creature, "hordeA", i)
           )}
         </Row>
@@ -404,6 +406,8 @@ class App extends Component {
 
   hordeB = () => {
     const disabled = this.disabledAttackBtn();
+    const horde = this.state.hordeB;
+    const remaining = horde.reduce((acc, cur) => (cur.hp > 0 ? ++acc : acc), 0);
     return (
       <div className="horde-data-div horde-container">
         <Button
@@ -420,9 +424,9 @@ class App extends Component {
           className="reset-icon"
         />
 
-        <div className="header">Horde B ({this.state.hordeB.length})</div>
+        <div className="header">{`Horde B (${remaining}/${horde.length})`}</div>
         <Row noGutters>
-          {this.state.hordeB.map((creature, i) =>
+          {horde.map((creature, i) =>
             this.renderCreature(creature, "hordeB", i)
           )}
         </Row>
