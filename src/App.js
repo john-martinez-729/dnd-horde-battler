@@ -437,7 +437,10 @@ class App extends Component {
   footer = () => (
     <div className="footer">
       Created by{" "}
-      <a target="_blank" href="https://www.instagram.com/buttcheeksio/?hl=en">
+      <a
+        target="_blank"
+        href="https://john-martinez-729.github.io/personal-site/"
+      >
         John Martinez
       </a>
     </div>
