@@ -1,437 +1,480 @@
-import './App.css';
-import React, { Component } from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {
-  Container,
-  Col,
-  Row,
-  FormControl,
-  Button
-} from 'react-bootstrap'
+import "./App.css";
+import React, { Component } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Col, Row, FormControl, Button } from "react-bootstrap";
 import {
   GiCheckedShield,
   GiSwordBrandish,
   GiHearts,
   GiDiceEightFacesEight,
   GiDeathSkull,
-} from 'react-icons/gi'
+} from "react-icons/gi";
 import {
   AiOutlineUndo,
   AiOutlineDelete,
   AiOutlineQuestionCircle,
-  AiOutlinePlus
-} from 'react-icons/ai'
+  AiOutlinePlus,
+} from "react-icons/ai";
 
-
-const MAX_DAM_DICE = 12
-const DICE_OPTIONS = [4, 6, 8, 10, 12, 20]
-const STARTING_HP = 1
-const STARTING_AC = 10
+const MAX_DAM_DICE = 12;
+const DICE_OPTIONS = [4, 6, 8, 10, 12, 20];
+const STARTING_HP = 1;
+const STARTING_AC = 10;
 
 class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
-      hordeA: {
-        arr: [],
+      creatureStats: {
         hp: STARTING_HP,
         ac: STARTING_AC,
         att: 0,
-        damDice: '',
+        damDice: "",
         validity: true,
       },
-      hordeB: {
-        arr: [],
-        hp: STARTING_HP,
-        ac: STARTING_AC,
-        att: 0,
-        damDice: '',
-        validity: true,
-      },
-      combatLog: []
-    }
+      hordeA: [],
+      hordeB: [],
+      combatLog: [],
+      numOfCreatures: 1,
+      chosenHorde: "",
+    };
   }
 
-  changeStats = (e, horde) => {
+  changeStats = (e) => {
     this.setState({
-      [horde]: {
-        ...this.state[horde],
-        [e.target.name]: e.target.value
-      }
-    })
-  }
+      creatureStats: {
+        ...this.state.creatureStats,
+        [e.target.name]: e.target.value,
+      },
+    });
+  };
+
+  changeParams = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
 
   parseDamDice = (dice, critical) => {
-    let numOfDice, dieSize, modifier
-    let total = 0
-    const damDice = dice.toUpperCase()
+    let numOfDice, dieSize, modifier;
+    let total = 0;
+    const damDice = dice.toUpperCase();
 
-    if (damDice.includes('D')) {
-      const split = damDice.split('D')
-      const splitA = split[0]
-      const splitB = split[1]
+    if (damDice.includes("D")) {
+      const split = damDice.split("D");
+      const splitA = split[0];
+      const splitB = split[1];
 
-      if (splitB.includes('+')) {
-        const splitAgain = splitB.split('+')
-        dieSize = parseInt(splitAgain[0])
-        modifier = parseInt(splitAgain[1])
-      } else if (splitB.includes('-')) {
-        const splitAgain = splitB.split('-')
-        dieSize = parseInt(splitAgain[0])
-        modifier = parseInt(splitAgain[1])
+      if (splitB.includes("+")) {
+        const splitAgain = splitB.split("+");
+        dieSize = parseInt(splitAgain[0]);
+        modifier = parseInt(splitAgain[1]);
+      } else if (splitB.includes("-")) {
+        const splitAgain = splitB.split("-");
+        dieSize = parseInt(splitAgain[0]);
+        modifier = parseInt(splitAgain[1]);
       } else {
-        dieSize = parseInt(split[1])
-        modifier = 0
+        dieSize = parseInt(split[1]);
+        modifier = 0;
       }
 
-      numOfDice = parseInt(splitA)
+      numOfDice = parseInt(splitA);
 
       if (critical) {
-        numOfDice *= 2
+        numOfDice *= 2;
       }
 
-      const maxDieRoll = dieSize + modifier
-      const minDieRoll = 1 + modifier
+      const maxDieRoll = dieSize + modifier;
+      const minDieRoll = 1 + modifier;
 
-      for (var i = 0; i < numOfDice; i++) { //Loop a number of times equal to the number of dice
-        total += this.rollDie(minDieRoll, maxDieRoll)
+      for (var i = 0; i < numOfDice; i++) {
+        //Loop a number of times equal to the number of dice
+        total += this.rollDie(minDieRoll, maxDieRoll);
       }
 
-      return total
+      return total;
     } else {
       this.setState({
-        validity: false
-      })
+        validity: false,
+      });
     }
-  }
+  };
 
   rollDie = (min, max) => {
-    return min + Math.floor(Math.random() * (max-min + 1))
-  }
+    return min + Math.floor(Math.random() * (max - min + 1));
+  };
 
-  handleAddToHorde = horde => {
-    const correctHorde = this.state[horde]
+  handleAddToHorde = () => {
+    const { creatureStats, numOfCreatures, chosenHorde } = this.state;
+    const newHorde = this.state[chosenHorde];
+
+    for (let i = 0; i < numOfCreatures; i++) {
+      const newCreature = {
+        num: newHorde.length + 1,
+        hp: parseInt(creatureStats.hp) || 1,
+        maxHp: parseInt(creatureStats.hp) || 1,
+        ac: parseInt(creatureStats.ac) || 10,
+        att: parseInt(creatureStats.att) || 0,
+        damDice: creatureStats.damDice || "1d1",
+      };
+      newHorde.push(newCreature);
+    }
+
     this.setState({
-      [horde]: {
-        ...this.state[horde],
-        arr: [
-          ...this.state[horde].arr,
-          {
-            num: correctHorde.arr.length + 1,
-            hp: correctHorde.hp || 1,
-            ac: correctHorde.ac || 10,
-            att: correctHorde.att || 0,
-            damDice: correctHorde.damDice || '1d1'
-          }
-        ]
-      }
-    })
-  }
+      [this.state.chosenHorde]: newHorde,
+    });
+  };
 
   deleteCreature = (horde, i) => {
-    const correctHordeArr = this.state[horde].arr
-    const deletedCreature = correctHordeArr.splice(i, 1)
+    const correctHordeArr = this.state[horde];
+    const deletedCreature = correctHordeArr.splice(i, 1);
 
     this.setState({
-      [horde]: {
-        ...this.state[horde],
-        arr: correctHordeArr
-      }
-    })
-  }
+      [horde]: correctHordeArr,
+    });
+  };
 
   attack = (attHorde, defender) => {
-    const attackingHorde = this.state[attHorde].arr
-    const combatLog = this.state.combatLog
-    let defendingHorde = this.state[defender].arr
+    const attackingHorde = this.state[attHorde];
+    const combatLog = this.state.combatLog;
+    let defendingHorde = this.state[defender];
 
     for (let i = 0; i < attackingHorde.length; i++) {
-      const attacker = attackingHorde[i]
+      const attacker = attackingHorde[i];
       if (attacker.hp > 0) {
-        let indexBeingAttacked = Math.floor((Math.random() * defendingHorde.length))
+        let indexBeingAttacked = Math.floor(
+          Math.random() * defendingHorde.length
+        );
         if (defendingHorde[indexBeingAttacked].hp <= 0) {
-          indexBeingAttacked = Math.floor((Math.random() * defendingHorde.length))
+          indexBeingAttacked = Math.floor(
+            Math.random() * defendingHorde.length
+          );
         }
 
-        const defender = defendingHorde[indexBeingAttacked]
-        const attackRoll = this.rollDie(1 + attacker.att, 20 + attacker.att)
+        const defender = defendingHorde[indexBeingAttacked];
+
+        const attackRoll = this.rollDie(1 + attacker.att, 20 + attacker.att);
+
         if (attackRoll - attacker.att == 20) {
-          const total = this.parseDamDice(attackingHorde[i].damDice, 'critical')
-          combatLog.push(`#${attacker.num} from ${attHorde} attacks #${defender.num} scoring a critical hit (${attackRoll}), dealing ${total} damage!!`)
+          const total = this.parseDamDice(
+            attackingHorde[i].damDice,
+            "critical"
+          );
+          combatLog.push(
+            `#${attacker.num} from ${attHorde} attacks #${defender.num} scoring a critical hit (${attackRoll}), dealing ${total} damage!!`
+          );
         } else if (attackRoll >= defender.ac) {
-          const total = this.parseDamDice(attackingHorde[i].damDice)
-          defendingHorde[indexBeingAttacked].hp -= total
-          combatLog.push(`#${attacker.num} from ${attHorde} attacks #${defender.num} and hits (${attackRoll}), dealing ${total} damage!`)
+          const total = this.parseDamDice(attackingHorde[i].damDice);
+          defendingHorde[indexBeingAttacked].hp -= total;
+          combatLog.push(
+            `#${attacker.num} from ${attHorde} attacks #${defender.num} and hits (${attackRoll}), dealing ${total} damage!`
+          );
 
           this.setState({
             [defender]: {
               ...this.state[defender],
-              arr: defendingHorde
+              arr: defendingHorde,
             },
-            combatLog: combatLog
-          })
+            combatLog: combatLog,
+          });
         } else {
-          combatLog.push(`#${attacker.num} from ${attHorde} attacks #${defender.num} and misses (${attackRoll}).`)
+          combatLog.push(
+            `#${attacker.num} from ${attHorde} attacks #${defender.num} and misses (${attackRoll}).`
+          );
           this.setState({
-            combatLog: combatLog
-          })
+            combatLog: combatLog,
+          });
         }
       }
     }
-  }
+  };
 
-  resetHorde = horde => {
+  resetHorde = (horde) => {
     this.setState({
-      [horde]: {
-        ...this.state[horde],
-        arr: []
-      }
-    })
-  }
+      [horde]: [],
+    });
+  };
 
   renderCreature = (creature, horde, i) => {
-    const maxHP = this.state[horde].hp
-    let currentHP = creature.hp > 0 ? creature.hp : 0
+    const { maxHp, hp, num } = creature;
+    let currentHp = hp > 0 ? hp : 0;
 
-    let id
-    if (currentHP == 0) {
-      id = 'dead'
-    } else if (currentHP < maxHP && currentHP > maxHP / 2) {
-      id = 'damaged'
-    } else if (currentHP <= maxHP / 2) {
-      id = 'bloodied'
+    let id;
+    if (currentHp == 0) {
+      id = "dead";
+    } else if (currentHp < maxHp && currentHp > maxHp / 2) {
+      id = "damaged";
+    } else if (currentHp <= maxHp / 2) {
+      id = "bloodied";
     } else {
-      id = 'normal'
+      id = "normal";
     }
 
     return (
-      <div key={`creatureContainer; ${horde}: ${i}`} className='creature-container' id={id}>
-        <AiOutlineDelete className='delete-icon' onClick={() => this.deleteCreature(horde, i)} />
-        <div className='creature-designation'>#{creature.num}</div>
-        <GiDeathSkull className='skull'/>
-        <div className='data'>
-          {currentHP} / {maxHP}
+      <div
+        key={`creatureContainer; ${horde}: ${i}`}
+        className="creature-container"
+        id={id}
+      >
+        <AiOutlineDelete
+          className="delete-icon"
+          onClick={() => this.deleteCreature(horde, i)}
+        />
+        <div className="creature-designation">#{num}</div>
+        <GiDeathSkull className="skull" />
+        <div className="data">
+          {currentHp} / {maxHp}
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   renderCombatLogEntry = (entry, i) => {
     return (
-      <div key={`combatLogEntry: ${i}`} className='entry'>
+      <div key={`combatLogEntry: ${i}`} className="entry">
         {`Entry #${i + 1}.`}
-        <div className='text'>{entry}</div>
+        <div className="text">{entry}</div>
       </div>
-    )
-  }
+    );
+  };
+
+  disabledAttackBtn = () => {
+    let disabled = false;
+    let countA = 0;
+    let countB = 0;
+    for (let i = 0; i < this.state.hordeA.length; i++) {
+      if (this.state.hordeA[i].hp == 0) {
+        countA++;
+      }
+    }
+
+    for (let i = 0; i < this.state.hordeB.length; i++) {
+      if (this.state.hordeB[i].hp == 0) {
+        countB++;
+      }
+    }
+
+    if (
+      countA == this.state.hordeA.length ||
+      countB == this.state.hordeB.length ||
+      this.state.hordeA.length == 0 ||
+      this.state.hordeB.length == 0
+    ) {
+      disabled = true;
+    }
+
+    return disabled;
+  };
+
+  //////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+
+  header = () => (
+    <div className="title-content">
+      <div className="title">D&D Horde Battler</div>
+      <div className="subtext">
+        This program utilizes basic d20 rules to determine the outcome of a
+        pitched battle between two groups of combatants.
+      </div>
+    </div>
+  );
+
+  creatureStats = () => {
+    const { hp, ac, att, damDice } = this.state.creatureStats;
+    return (
+      <div className="horde-data-div">
+        <div className="creature-input-container">
+          <FormControl
+            onChange={this.changeParams}
+            name="numOfCreatures"
+            value={this.state.numOfCreatures}
+            placeholder="# of creatures..."
+            type="number"
+            className="number-of-creatures-form-control"
+          />
+
+          <FormControl
+            onChange={this.changeParams}
+            name="chosenHorde"
+            value={this.state.chosenHorde}
+            as="select"
+            className="select-horde-form-control"
+          >
+            <option value="">Select a horde...</option>
+            <option value="hordeA">Horde A</option>
+            <option value="hordeB">Horde B</option>
+          </FormControl>
+
+          <Button
+            onClick={() => this.handleAddToHorde("hordeA")}
+            className="common-button add-button"
+          >
+            <AiOutlinePlus />
+            Add to Horde
+          </Button>
+        </div>
+
+        <div className="header">Creature Stats</div>
+
+        <Row noGutters>
+          <Col lg={4} className="form-control-container">
+            <label>
+              <GiHearts className="label-icon" />
+              HP
+            </label>
+            <FormControl
+              onChange={this.changeStats}
+              name="hp"
+              value={hp}
+              type="number"
+            />
+          </Col>
+
+          <Col lg={4} className="form-control-container">
+            <label>
+              <GiCheckedShield className="label-icon" />
+              AC
+            </label>
+            <FormControl
+              onChange={this.changeStats}
+              name="ac"
+              value={ac}
+              type="number"
+            />
+          </Col>
+
+          <Col lg={4} className="form-control-container">
+            <label>
+              <GiSwordBrandish className="label-icon" />
+              Attack Bonus
+            </label>
+            <FormControl
+              onChange={this.changeStats}
+              name="att"
+              value={att}
+              type="number"
+            />
+          </Col>
+
+          <Col lg={4} className="form-control-container">
+            <label>
+              <GiDiceEightFacesEight className="label-icon" />
+              Damage
+            </label>
+            <FormControl
+              onChange={this.changeStats}
+              name="damDice"
+              placeholder="Ex. 1d8+2; 3d6+4"
+              value={damDice}
+            />
+          </Col>
+        </Row>
+      </div>
+    );
+  };
+
+  hordeA = () => {
+    const disabled = this.disabledAttackBtn();
+    return (
+      <div className="horde-data-div horde-container">
+        <Button
+          disabled={disabled}
+          onClick={() => this.attack("hordeA", "hordeB")}
+          className="common-button attack-button"
+        >
+          <GiSwordBrandish />
+          Attack!
+        </Button>
+
+        <AiOutlineUndo
+          onClick={() => this.resetHorde("hordeA")}
+          className="reset-icon"
+        />
+
+        <div className="header">Horde A ({this.state.hordeA.length})</div>
+        <Row noGutters>
+          {this.state.hordeA.map((creature, i) =>
+            this.renderCreature(creature, "hordeA", i)
+          )}
+        </Row>
+      </div>
+    );
+  };
+
+  hordeB = () => {
+    const disabled = this.disabledAttackBtn();
+    return (
+      <div className="horde-data-div horde-container">
+        <Button
+          disabled={disabled}
+          onClick={() => this.attack("hordeB", "hordeA")}
+          className="common-button attack-button"
+        >
+          <GiSwordBrandish />
+          Attack!
+        </Button>
+
+        <AiOutlineUndo
+          onClick={() => this.resetHorde("hordeB")}
+          className="reset-icon"
+        />
+
+        <div className="header">Horde B ({this.state.hordeB.length})</div>
+        <Row noGutters>
+          {this.state.hordeB.map((creature, i) =>
+            this.renderCreature(creature, "hordeB", i)
+          )}
+        </Row>
+      </div>
+    );
+  };
+
+  footer = () => (
+    <div className="footer">
+      Created by{" "}
+      <a target="_blank" href="https://www.instagram.com/buttcheeksio/?hl=en">
+        John Martinez
+      </a>
+    </div>
+  );
+
+  combatLog = () => (
+    <div className="horde-data-div combat-log-container">
+      <div className="header">Combat Log</div>
+      <div className="combat-log">
+        {this.state.combatLog.map((entry, i) =>
+          this.renderCombatLogEntry(entry, i)
+        )}
+      </div>
+    </div>
+  );
 
   render() {
     return (
-      <Container className='App' fluid>
-        <Row noGutters className='top-row'>
-          <Col className='top-col divider'>
-            <div className='title-content'>
-              <div className='title'>
-                D&D Horde Battler
-              </div>
-              <div className='subtext'>
-                This program utilizes basic d20 rules to
-                determine the outcome of a pitched battle between two groups of
-                combatants.
-              </div>
-            </div>
-
-            <div className='horde-data-div'>
-              <Button
-                onClick={() => this.handleAddToHorde('hordeA')}
-                className='common-button add-button'>
-                <AiOutlinePlus />
-                Add to Horde
-              </Button>
-
-              <div className='header'>Horde A</div>
-
-              <Row noGutters>
-                <Col lg={4} className='form-control-container'>
-                  <label>
-                    <GiHearts className='label-icon'/>
-                    HP
-                  </label>
-                  <FormControl
-                    onChange={e => this.changeStats(e, 'hordeA')}
-                    name='hp'
-                    value={this.state.hordeA.hp}
-                    type='number' />
-                </Col>
-
-                <Col lg={4} className='form-control-container'>
-                  <label>
-                    <GiCheckedShield className='label-icon'/>
-                    AC
-                  </label>
-                  <FormControl
-                    onChange={e => this.changeStats(e, 'hordeA')}
-                    name='ac'
-                    value={this.state.hordeA.ac}
-                    type='number' />
-                </Col>
-
-                <Col lg={4} className='form-control-container'>
-                  <label>
-                    <GiSwordBrandish className='label-icon'/>
-                    Attack Bonus
-                  </label>
-                  <FormControl
-                    onChange={e => this.changeStats(e, 'hordeA')}
-                    name='att'
-                    value={this.state.hordeA.att}
-                    type='number' />
-                </Col>
-
-                <Col lg={4} className='form-control-container'>
-                  <label>
-                    <GiDiceEightFacesEight className='label-icon'/>
-                    Damage
-                  </label>
-                  <FormControl
-                    onChange={e => this.changeStats(e, 'hordeA')}
-                    name='damDice'
-                    placeholder='Ex. 1d8+2; 3d6+4'
-                    value={this.state.hordeA.damDice} />
-                </Col>
-
-              </Row>
-            </div>
-
-            <div className='horde-data-div'>
-              <Button
-                onClick={() => this.handleAddToHorde('hordeB')}
-                className='common-button add-button'>
-                <AiOutlinePlus />
-                Add to Horde
-              </Button>
-
-              <div className='header'>Horde B</div>
-
-              <Row noGutters>
-                <Col lg={4} className='form-control-container'>
-                  <label>
-                    <GiHearts className='label-icon'/>
-                    HP
-                  </label>
-                  <FormControl
-                    onChange={e => this.changeStats(e, 'hordeB')}
-                    name='hp'
-                    value={this.state.hordeB.hp}
-                    type='number' />
-                </Col>
-
-                <Col lg={4} className='form-control-container'>
-                  <label>
-                    <GiCheckedShield className='label-icon'/>
-                    AC
-                  </label>
-                  <FormControl
-                    onChange={e => this.changeStats(e, 'hordeB')}
-                    name='ac'
-                    value={this.state.hordeB.ac}
-                    type='number' />
-                </Col>
-
-                <Col lg={4} className='form-control-container'>
-                  <label>
-                    <GiSwordBrandish className='label-icon'/>
-                    Attack Bonus
-                  </label>
-                  <FormControl
-                    onChange={e => this.changeStats(e, 'hordeB')}
-                    name='att'
-                    value={this.state.hordeB.att}
-                    type='number' />
-                </Col>
-
-                <Col lg={4} className='form-control-container'>
-                  <label>
-                    <GiDiceEightFacesEight className='label-icon'/>
-                    Damage
-                  </label>
-                  <FormControl
-                    onChange={e => this.changeStats(e, 'hordeB')}
-                    name='damDice'
-                    placeholder='Ex. 1d8+2; 3d6+4'
-                    value={this.state.hordeB.damDice} />
-                </Col>
-              </Row>
-            </div>
+      <div className="App">
+        <Row noGutters className="top-row">
+          <Col lg={6} className="top-col divider">
+            {this.header()}
+            {this.creatureStats()}
           </Col>
-          <Col className='top-col'>
-            <div className='horde-data-div horde-container'>
-
-              <Button
-                disabled={this.state.hordeA.arr.length == 0 && true || this.state.hordeB.arr.length == 0 && true}
-                onClick={() => this.attack('hordeA', 'hordeB')}
-                className='common-button attack-button'>
-                <GiSwordBrandish />
-                Attack!
-              </Button>
-
-              <AiOutlineUndo onClick={() => this.resetHorde('hordeA')} className='reset-icon'/>
-
-              <div className='header'>
-                Horde A
-                ({this.state.hordeA.arr.length})
-              </div>
-              <Row noGutters>
-                {
-                  this.state.hordeA.arr.map((creature, i) => this.renderCreature(creature, 'hordeA', i))
-                }
-              </Row>
-            </div>
-
-            <div className='horde-data-div horde-container'>
-              <Button
-                disabled={this.state.hordeA.arr.length == 0 && true || this.state.hordeB.arr.length == 0 && true}
-                onClick={() => this.attack('hordeB', 'hordeA')}
-                className='common-button attack-button'>
-                <GiSwordBrandish />
-                Attack!
-              </Button>
-
-              <AiOutlineUndo onClick={() => this.resetHorde('hordeB')} className='reset-icon'/>
-
-              <div className='header'>
-                Horde B
-                ({this.state.hordeB.arr.length})
-              </div>
-              <Row noGutters>
-                {
-                  this.state.hordeB.arr.map((creature, i) => this.renderCreature(creature, 'hordeB', i))
-                }
-              </Row>
-            </div>
-
-            <div className='horde-data-div combat-log-container'>
-              <div className='header'>
-                Combat Log
-              </div>
-
-              <div className='combat-log'>
-                {
-                  this.state.combatLog.map((entry, i) => this.renderCombatLogEntry(entry, i))
-                }
-              </div>
-            </div>
+          <Col lg={6} className="top-col">
+            {this.hordeA()}
+            {this.hordeB()}
+            {this.combatLog()}
           </Col>
         </Row>
-
-        <Row noGutters className='footer-row'>
-          Written by John Martinez
-        </Row>
-      </Container>
-    )
+        {this.footer()}
+      </div>
+    );
   }
-
 }
+
+// {this.header()}
+// {this.creatureStats()}
+//
+// {this.hordeA()}
+// {this.hordeB()}
+// {this.combatLog()}
 
 export default App;

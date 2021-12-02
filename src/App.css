@@ -1,18 +1,29 @@
 :root {
-  --GhostWhite: #F8F8FF;
+  --GhostWhite: #f8f8ff;
   --TextColor: #858796;
   --BorderColor: rgba(0, 0, 0, 0.1);
   --LightText: rgba(0, 0, 0, 0.3);
   --OffBlack: #313639;
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
+body {
+  background-color: var(--GhostWhite) !important;
 }
 
-body {
-  background: var(--GhostWhite);
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--LightText);
+  border-radius: 20px;
 }
 
 .title {
@@ -22,18 +33,15 @@ body {
 .subtext {
   margin-bottom: 16px;
 }
+
 .title-content {
   color: var(--OffBlack);
 }
 
 .App {
-  position: fixed;
-  overflow: auto;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  padding: 0 !important;
+  background-color: var(--GhostWhite);
+  padding: 16px;
+  min-height: 100vh;
 }
 
 .common-button {
@@ -51,9 +59,9 @@ body {
 }
 
 .App .top-col {
-  height: 100%;
-  padding: 16px !important;
+  min-height: 100vh;
   border-bottom: 1px solid var(--BorderColor);
+  padding: 0 16px !important;
 }
 
 .App .divider {
@@ -61,8 +69,8 @@ body {
 }
 
 .add-button {
-  position: absolute;
-  right: 8px;
+  /* position: absolute;
+  right: 8px; */
   padding: 2px 4px !important;
   font-size: 12px !important;
 }
@@ -146,7 +154,6 @@ label {
   /* height: max-content; */
   margin: 0;
   padding: 0;
-
 }
 
 .creature-container .data {
@@ -226,12 +233,12 @@ label {
 
 .combat-log-container {
   overflow-y: scroll;
-  max-height: 30%;
+  max-height: 300px;
 }
 
 .horde-container {
-  max-height: 30%;
-  overflow-y: scroll;
+  /* max-height: 300px; */
+  /* overflow-y: scroll; */
 }
 
 .entry {
@@ -241,4 +248,51 @@ label {
 .entry .text {
   color: var(--TextColor);
   margin-left: 8px;
+}
+
+.select-horde-form-control {
+  width: 140px !important;
+  padding: 0 !important;
+  /* position: absolute; */
+  /* right: 270px; */
+}
+
+.number-of-creatures-form-control {
+  width: 140px !important;
+  /* position: absolute;
+  right: 120px; */
+}
+
+.creature-input-container {
+  display: flex;
+  position: absolute;
+  right: 4px;
+}
+
+.creature-input-container .form-control {
+  margin-right: 4px;
+}
+
+.footer {
+  margin-top: 4px;
+  padding: 4px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 2;
+  font-size: 13px;
+  background-color: var(--GhostWhite);
+  border-top: 1px solid var(--BorderColor);
+}
+
+@media only screen and (max-width: 992px) {
+  .App {
+    padding: 0;
+  }
+  .top-col {
+    min-height: 100% !important;
+    border: none !important;
+  }
 }
