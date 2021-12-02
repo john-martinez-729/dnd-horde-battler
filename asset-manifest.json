@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/dnd-horde-battler/static/css/main.89a3ce87.chunk.css",
+    "main.js": "/dnd-horde-battler/static/js/main.7f832cd4.chunk.js",
+    "main.js.map": "/dnd-horde-battler/static/js/main.7f832cd4.chunk.js.map",
+    "runtime-main.js": "/dnd-horde-battler/static/js/runtime-main.6cbe88f5.js",
+    "runtime-main.js.map": "/dnd-horde-battler/static/js/runtime-main.6cbe88f5.js.map",
+    "static/css/2.1a02f21c.chunk.css": "/dnd-horde-battler/static/css/2.1a02f21c.chunk.css",
+    "static/js/2.9f0f61fb.chunk.js": "/dnd-horde-battler/static/js/2.9f0f61fb.chunk.js",
+    "static/js/2.9f0f61fb.chunk.js.map": "/dnd-horde-battler/static/js/2.9f0f61fb.chunk.js.map",
+    "static/js/3.deed1f5c.chunk.js": "/dnd-horde-battler/static/js/3.deed1f5c.chunk.js",
+    "static/js/3.deed1f5c.chunk.js.map": "/dnd-horde-battler/static/js/3.deed1f5c.chunk.js.map",
+    "index.html": "/dnd-horde-battler/index.html",
+    "static/css/2.1a02f21c.chunk.css.map": "/dnd-horde-battler/static/css/2.1a02f21c.chunk.css.map",
+    "static/css/main.89a3ce87.chunk.css.map": "/dnd-horde-battler/static/css/main.89a3ce87.chunk.css.map",
+    "static/js/2.9f0f61fb.chunk.js.LICENSE.txt": "/dnd-horde-battler/static/js/2.9f0f61fb.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6cbe88f5.js",
+    "static/css/2.1a02f21c.chunk.css",
+    "static/js/2.9f0f61fb.chunk.js",
+    "static/css/main.89a3ce87.chunk.css",
+    "static/js/main.7f832cd4.chunk.js"
+  ]
+}
