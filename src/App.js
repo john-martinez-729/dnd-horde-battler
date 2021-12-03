@@ -275,7 +275,7 @@ class App extends Component {
       <div className="title">D&D Horde Battler</div>
       <div className="subtext">
         This program utilizes basic d20 rules to determine the outcome of a
-        pitched battle between two groups of combatants.
+        pitched battle between two hordes of creatures.
       </div>
     </div>
   );
